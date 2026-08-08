@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Iraq Profit Calculator by Zidan</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --orange: #E8501A;
+  --orange-light: #FFF0EA;
+  --dark: #1A1A2E;
+  --green: #16A34A;
+  --green-light: #F0FDF4;
+  --red: #DC2626;
+  --red-light: #FEF2F2;
+  --amber: #D97706;
+  --amber-light: #FFFBEB;
+  --blue: #2563EB;
+  --blue-light: #EFF6FF;
+  --purple: #7C3AED;
+  --purple-light: #F5F3FF;
+  --border: #E5E7EB;
+  --text: #111827;
+  --text2: #6B7280;
+  --text3: #9CA3AF;
+  --bg: #F3F4F6;
+  --card: #ffffff;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Cairo', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  padding: 24px 16px 80px;
+}
+.container { max-width: 700px; margin: 0 auto; }
+
+/* HEADER */
+.header {
+  background: linear-gradient(135deg, var(--orange), #C03A0E);
+  border-radius: 20px;
+  padding: 28px 32px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.header-icon { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; flex-shrink: 0; }
+.header-icon span { width: 18px; height: 18px; background: #fff; border-radius: 4px; display: block; }
+.header-icon span:last-child { opacity: 0.4; }
+.header-text h1 { font-size: 22px; font-weight: 800; color: #fff; }
+.header-text p { font-size: 12px; color: rgba(255,255,255,0.75); margin-top: 3px; }
+.header-by { margin-top: 4px; font-size: 11px; color: rgba(255,255,255,0.5); }
+
+/* RATE CARD */
+.rate-card {
+  background: var(--dark);
+  border-radius: 14px;
+  padding: 14px 20px;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.rate-label { font-size: 13px; color: rgba(255,255,255,0.6); }
+.rate-value { font-size: 16px; font-weight: 700; color: #fff; }
+.rate-input-wrap { display: flex; align-items: center; gap: 8px; }
+.rate-input {
+  width: 100px; padding: 6px 10px;
+  border-radius: 8px; border: 1.5px solid rgba(255,255,255,0.15);
+  background: rgba(255,255,255,0.08); color: #fff;
+  font-family: 'Cairo', sans-serif; font-size: 14px; font-weight: 600;
+  text-align: center; outline: none;
+}
+.rate-input:focus { border-color: var(--orange); }
+.rate-tag { font-size: 11px; color: rgba(255,255,255,0.4); }
+
+/* CARDS */
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 16px;
+}
+.card-title {
+  font-size: 13px; font-weight: 600; color: var(--text2);
+  margin-bottom: 20px; text-transform: uppercase; letter-spacing: .5px;
+}
+
+/* INPUTS */
+.input-group { margin-bottom: 20px; }
+.input-group:last-child { margin-bottom: 0; }
+.input-label {
+  display: flex; justify-content: space-between; align-items: center;
+  font-size: 14px; color: var(--text); margin-bottom: 10px; font-weight: 500;
+}
+.input-label .val-wrap { display: flex; align-items: baseline; gap: 6px; }
+.input-label .val-iqd { font-size: 18px; font-weight: 700; color: var(--orange); }
+.input-label .val-usd { font-size: 13px; font-weight: 600; color: var(--text3); }
+input[type=range] {
+  width: 100%; height: 6px; border-radius: 3px;
+  outline: none; border: none; cursor: pointer;
+  accent-color: var(--orange); margin-bottom: 8px;
+}
+.number-input {
+  width: 100%; padding: 10px 16px;
+  border-radius: 10px; border: 1.5px solid var(--border);
+  background: var(--bg); color: var(--text);
+  font-family: 'Cairo', sans-serif; font-size: 15px; font-weight: 600;
+  text-align: center; transition: border-color .2s; outline: none;
+}
+.number-input:focus { border-color: var(--orange); background: #fff; }
+.input-hint { font-size: 11px; color: var(--text3); text-align: center; margin-top: 4px; }
+
+/* VERDICT */
+.verdict {
+  border-radius: 16px; padding: 20px 24px;
+  text-align: center; margin-bottom: 16px; transition: all .3s;
+}
+.verdict-emoji { font-size: 32px; margin-bottom: 8px; }
+.verdict-title { font-size: 18px; font-weight: 700; margin-bottom: 4px; }
+.verdict-sub { font-size: 13px; opacity: .85; }
+
+/* RESULTS */
+.results { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-bottom: 16px; }
+.result-box { border-radius: 14px; padding: 16px; text-align: center; }
+.result-label { font-size: 12px; font-weight: 500; margin-bottom: 6px; }
+.result-value-usd { font-size: 26px; font-weight: 800; }
+.result-value-iqd { font-size: 12px; font-weight: 500; margin-top: 4px; opacity: .6; }
+
+/* CURRENCY BADGE */
+.currency-badge {
+  display: inline-block; font-size: 10px; font-weight: 700;
+  padding: 2px 7px; border-radius: 6px; margin-right: 4px; vertical-align: middle;
+}
+.badge-usd { background: #D1FAE5; color: #065F46; }
+.badge-iqd { background: #FEF3C7; color: #92400E; }
+
+/* TABLE */
+.table-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 12px 0; border-bottom: 1px solid var(--border); font-size: 14px;
+}
+.table-row:last-child { border-bottom: none; }
+.table-row .lbl { color: var(--text2); }
+.table-row .val-col { text-align: left; }
+.table-row .usd-val { font-weight: 700; color: var(--text); }
+.table-row .iqd-val { font-size: 11px; color: var(--text3); margin-top: 2px; }
+
+/* SCENARIOS */
+.scenario-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 11px 0; border-bottom: 1px solid var(--border); font-size: 14px;
+}
+.scenario-row:last-child { border-bottom: none; }
+.scenario-row.active {
+  background: var(--orange-light); border-radius: 10px;
+  padding: 11px 14px; margin: 3px -14px; border-bottom: none;
+}
+.s-label { color: var(--text2); }
+.s-vals { text-align: left; }
+.s-usd { font-weight: 700; }
+.s-iqd { font-size: 11px; color: var(--text3); }
+
+/* PROGRESS */
+.progress-wrap { margin-top: 8px; }
+.progress-label { display: flex; justify-content: space-between; font-size: 12px; color: var(--text3); margin-bottom: 5px; }
+.progress-bar { height: 8px; background: var(--border); border-radius: 4px; overflow: hidden; }
+.progress-fill { height: 100%; border-radius: 4px; background: var(--orange); transition: width .4s; }
+
+.footer { text-align: center; font-size: 12px; color: var(--text3); margin-top: 24px; }
+
+@media(max-width:480px){
+  .results { grid-template-columns: 1fr 1fr; }
+  .header { padding: 20px; }
+  .header-text h1 { font-size: 17px; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-icon">
+      <span></span><span></span><span></span><span></span>
+    </div>
+    <div class="header-text">
+      <h1>Iraq Profit Calculator</h1>
+      <p>احسب ربحك بالدينار العراقي والدولار</p>
+      <div class="header-by">by Zidan 🇮🇶</div>
+    </div>
+  </div>
+
+  <!-- EXCHANGE RATE -->
+  <div class="rate-card">
+    <div>
+      <div class="rate-label">سعر صرف الدولار</div>
+      <div class="rate-value" id="rateDisplay">1 $ = 1,600 د.ع</div>
+    </div>
+    <div class="rate-input-wrap">
+      <div class="rate-tag">غيّر السعر:</div>
+      <input type="number" class="rate-input" id="rateInput" value="1600" min="1000" max="2000" oninput="updateRate(this.value)">
+      <div class="rate-tag">د.ع</div>
+    </div>
+  </div>
+
+  <!-- INPUTS -->
+  <div class="card">
+    <div class="card-title">أدخل البيانات بالدينار العراقي</div>
+
+    <div class="input-group">
+      <div class="input-label">
+        <span>📦 عدد الأوردرات</span>
+        <div class="val-wrap">
+          <span class="val-iqd" id="ordersVal">100</span>
+          <span class="val-usd">أوردر</span>
+        </div>
+      </div>
+      <input type="range" id="ordersRange" min="10" max="5000" step="10" value="100" oninput="sync('orders',this.value)">
+      <input type="number" class="number-input" id="ordersNum" value="100" min="1" oninput="sync('orders',this.value)" placeholder="عدد الأوردرات">
+    </div>
+
+    <div class="input-group">
+      <div class="input-label">
+        <span>💰 ربح القطعة</span>
+        <div class="val-wrap">
+          <span class="val-iqd" id="profitVal">20,000</span>
+          <span class="val-usd" id="profitUsd">= $12.5</span>
+        </div>
+      </div>
+      <input type="range" id="profitRange" min="1000" max="500000" step="1000" value="20000" oninput="sync('profit',this.value)">
+      <input type="number" class="number-input" id="profitNum" value="20000" min="0" oninput="sync('profit',this.value)" placeholder="مثال: 20000 د.ع">
+      <div class="input-hint">أدخل الربح بالدينار العراقي 🇮🇶</div>
+    </div>
+
+    <div class="input-group">
+      <div class="input-label">
+        <span>📢 CPA — تكلفة الإعلان للطلب ($)</span>
+        <div class="val-wrap">
+          <span class="val-iqd" id="cpaVal">$3</span>
+          <span class="val-usd" id="cpaUsd">= 4,800 د.ع</span>
+        </div>
+      </div>
+      <input type="range" id="cpaRange" min="1" max="200" step="0.5" value="3" oninput="sync('cpa',this.value)">
+      <input type="number" class="number-input" id="cpaNum" value="3" min="0" step="0.5" oninput="sync('cpa',this.value)" placeholder="مثال: 3 $">
+      <div class="input-hint">أدخل الـ CPA بالدولار 💵</div>
+    </div>
+
+    <div class="input-group">
+      <div class="input-label">
+        <span>🚚 نسبة التوصيل %</span>
+        <div class="val-wrap">
+          <span class="val-iqd" id="deliveryVal">35%</span>
+        </div>
+      </div>
+      <input type="range" id="deliveryRange" min="5" max="100" step="1" value="35" oninput="sync('delivery',this.value)">
+      <input type="number" class="number-input" id="deliveryNum" value="35" min="0" max="100" oninput="sync('delivery',this.value)" placeholder="مثال: 35">
+      <div class="progress-wrap">
+        <div class="progress-label"><span>5%</span><span>100%</span></div>
+        <div class="progress-bar"><div class="progress-fill" id="deliveryBar" style="width:35%"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- VERDICT -->
+  <div class="verdict" id="verdict"></div>
+
+  <!-- RESULTS بالدولار -->
+  <div class="card">
+    <div class="card-title">
+      <span class="currency-badge badge-usd">$</span> النتائج بالدولار الأمريكي
+    </div>
+    <div class="results">
+      <div class="result-box" style="background:var(--green-light)">
+        <div class="result-label" style="color:var(--green)">صافي الربح</div>
+        <div class="result-value-usd" style="color:var(--green)" id="netUsd">—</div>
+        <div class="result-value-iqd" id="netIqd">—</div>
+      </div>
+
+      <div class="result-box" style="background:var(--amber-light)">
+        <div class="result-label" style="color:var(--amber)">إيراد فعلي</div>
+        <div class="result-value-usd" style="color:var(--amber)" id="revUsd">—</div>
+        <div class="result-value-iqd" id="revIqd">—</div>
+      </div>
+      <div class="result-box" style="background:var(--red-light)">
+        <div class="result-label" style="color:var(--red)">تكلفة الإعلانات</div>
+        <div class="result-value-usd" style="color:var(--red)" id="adUsd">—</div>
+        <div class="result-value-iqd" id="adIqd">—</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BREAKEVEN -->
+  <div class="card">
+    <div class="card-title">نقطة التعادل والحدود</div>
+    <div class="table-row">
+      <span class="lbl">أقل نسبة توصيل تضمن ربح</span>
+      <div class="val-col">
+        <div class="usd-val" id="breakeven" style="color:var(--orange)">—</div>
+      </div>
+    </div>
+    <div class="table-row">
+      <span class="lbl">أقصى CPA تقدر تتحمله</span>
+      <div class="val-col">
+        <div class="usd-val" id="maxCpaUsd" style="color:var(--orange)">—</div>
+        <div class="iqd-val" id="maxCpaIqd">—</div>
+      </div>
+    </div>
+    <div class="table-row">
+      <span class="lbl">ربح القطعة المسلّمة بعد الإعلان</span>
+      <div class="val-col">
+        <div class="usd-val" id="perUnitUsd" style="color:var(--orange)">—</div>
+        <div class="iqd-val" id="perUnitIqd">—</div>
+      </div>
+    </div>
+    <div class="table-row">
+      <span class="lbl">عدد الطلبات المسلّمة</span>
+      <div class="val-col">
+        <div class="usd-val" id="delivered" style="color:var(--orange)">—</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCENARIOS -->
+  <div class="card">
+    <div class="card-title">لو حسّنت نسبة التوصيل</div>
+    <div id="scenarios"></div>
+  </div>
+
+  <div class="footer">Iraq Profit Calculator 🇮🇶 by Zidan</div>
+</div>
+
+<script>
+const state = { orders: 100, profit: 20000, cpaUSD: 3, delivery: 35, rate: 1600 };
+
+function fmtIQD(n) {
+  return Math.round(n).toLocaleString('ar-IQ') + ' د.ع';
+}
+function fmtUSD(n) {
+  return '$' + (n / state.rate).toFixed(1);
+}
+function fmtUSDFull(n) {
+  return '$' + (n / state.rate).toFixed(2);
+}
+
+function updateRate(val) {
+  val = parseFloat(val) || 1600;
+  state.rate = val;
+  document.getElementById('rateDisplay').textContent = `1 $ = ${val.toLocaleString('ar-IQ')} د.ع`;
+  calc();
+}
+
+function sync(key, val) {
+  val = parseFloat(val) || 0;
+  state[key] = val;
+
+  if (key === 'orders') {
+    document.getElementById('ordersVal').textContent = val.toLocaleString('ar-IQ');
+    document.getElementById('ordersRange').value = val;
+    document.getElementById('ordersNum').value = val;
+  } else if (key === 'profit') {
+    document.getElementById('profitVal').textContent = val.toLocaleString('ar-IQ');
+    document.getElementById('profitUsd').textContent = '= ' + fmtUSD(val);
+    document.getElementById('profitRange').value = val;
+    document.getElementById('profitNum').value = val;
+  } else if (key === 'cpa') {
+    document.getElementById('cpaVal').textContent = val.toLocaleString('ar-IQ');
+    document.getElementById('cpaUsd').textContent = '= ' + fmtUSD(val);
+    document.getElementById('cpaRange').value = val;
+    document.getElementById('cpaNum').value = val;
+  } else if (key === 'delivery') {
+    document.getElementById('deliveryVal').textContent = val + '%';
+    document.getElementById('deliveryRange').value = val;
+    document.getElementById('deliveryNum').value = val;
+    document.getElementById('deliveryBar').style.width = Math.min(val, 100) + '%';
+  }
+  calc();
+}
+
+function calc() {
+  const { orders, profit, cpaUSD, delivery, rate } = state;
+  const cpaIQD = cpaUSD * rate;
+
+  const revenueIQD = (delivery / 100) * orders * profit;
+  const adCostIQD  = orders * cpaIQD;
+  const netIQD     = revenueIQD - adCostIQD;
+
+  const delivered  = Math.round((delivery / 100) * orders);
+  const perUnitIQD = delivered > 0 ? netIQD / delivered : 0;
+  const beDelivery = profit > 0 ? (cpaIQD / profit * 100) : 0;
+  const maxCpaIQD  = profit * (delivery / 100);
+
+  // Update results — USD primary, IQD secondary
+  document.getElementById('netUsd').textContent   = '$' + (netIQD / rate).toFixed(1);
+  document.getElementById('netIqd').textContent   = fmtIQD(netIQD);
+  document.getElementById('revUsd').textContent   = '$' + (revenueIQD / rate).toFixed(1);
+  document.getElementById('revIqd').textContent   = fmtIQD(revenueIQD);
+  document.getElementById('adUsd').textContent    = '$' + (adCostIQD / rate).toFixed(1);
+  document.getElementById('adIqd').textContent    = fmtIQD(adCostIQD);
+
+  document.getElementById('breakeven').textContent = beDelivery.toFixed(1) + '%';
+  document.getElementById('maxCpaUsd').textContent = '$' + (maxCpaIQD / rate).toFixed(1);
+  document.getElementById('maxCpaIqd').textContent = fmtIQD(maxCpaIQD);
+  document.getElementById('perUnitUsd').textContent = '$' + (perUnitIQD / rate).toFixed(1);
+  document.getElementById('perUnitIqd').textContent = fmtIQD(perUnitIQD);
+  document.getElementById('delivered').textContent = delivered.toLocaleString('ar-IQ') + ' طلب';
+
+  // Profit USD display sync
+  document.getElementById('profitUsd').textContent = '= $' + (profit / rate).toFixed(1);
+  document.getElementById('cpaVal').textContent    = '$' + cpaUSD;
+  document.getElementById('cpaUsd').textContent    = '= ' + Math.round(cpaUSD * rate).toLocaleString('ar-IQ') + ' د.ع';
+
+  // Verdict
+  const v = document.getElementById('verdict');
+  const roas = adCostIQD > 0 ? revenueIQD / adCostIQD : 0;
+  if (netIQD > 0 && roas >= 2) {
+    v.style.background = 'var(--green-light)'; v.style.color = 'var(--green)';
+    v.innerHTML = `<div class="verdict-emoji">✅</div><div class="verdict-title">المنتج مربح</div><div class="verdict-sub">ROAS ${roas.toFixed(1)}x — كل $1 إعلان بيرجع $${roas.toFixed(1)}<br>صافي الربح: $${(netIQD/rate).toFixed(1)} = ${fmtIQD(netIQD)}</div>`;
+  } else if (netIQD > 0) {
+    v.style.background = 'var(--amber-light)'; v.style.color = 'var(--amber)';
+    v.innerHTML = `<div class="verdict-emoji">⚠️</div><div class="verdict-title">ربح ضعيف</div><div class="verdict-sub">محتاج تحسّن نسبة التوصيل أو تقلل الـ CPA<br>صافي الربح: $${(netIQD/rate).toFixed(1)} = ${fmtIQD(netIQD)}</div>`;
+  } else {
+    v.style.background = 'var(--red-light)'; v.style.color = 'var(--red)';
+    v.innerHTML = `<div class="verdict-emoji">🔴</div><div class="verdict-title">خسارة</div><div class="verdict-sub">الإعلانات بتاكل الربح — راجع التسعير أو الـ CPA<br>الخسارة: $${Math.abs(netIQD/rate).toFixed(1)} = ${fmtIQD(Math.abs(netIQD))}</div>`;
+  }
+
+  // Scenarios
+  const scenarios = [30, 40, 50, 60, 70, 80];
+  const closest = scenarios.reduce((a, b) => Math.abs(b - delivery) < Math.abs(a - delivery) ? b : a);
+  let html = '';
+  scenarios.forEach(d => {
+    const nIQD = (d / 100) * orders * profit - adCostIQD;
+    const nUSD = (nIQD / rate).toFixed(1);
+    const isCurrent = d === closest;
+    html += `<div class="scenario-row${isCurrent ? ' active' : ''}">
+      <span class="s-label">توصيل ${d}%${isCurrent ? ' ← أنت هنا' : ''}</span>
+      <div class="s-vals">
+        <div class="s-usd" style="color:${nIQD > 0 ? 'var(--green)' : 'var(--red)'}">$${nUSD}</div>
+        <div class="s-iqd">${fmtIQD(nIQD)}</div>
+      </div>
+    </div>`;
+  });
+  document.getElementById('scenarios').innerHTML = html;
+}
+
+calc();
+</script>
+</body>
+</html>
